@@ -1,11 +1,12 @@
 from __future__ import print_function
 
+import six.moves.cPickle as pickle
 import pickle
 import os
 import sys
 import timeit
 import numpy as np 
-#import Theano 
+import Theano 
 import theano.tensor as T
 class LogisticRegression(object):
     def __init__ (self, input, n_in,n_out) :
