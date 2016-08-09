@@ -3,11 +3,16 @@ import cmath
 #import math
 import matplotlib.pyplot as plt
 import Bandpass
+cimport numpy as np
+
+#DType= np.int 
 
 data2= np.genfromtxt('book.csv', delimiter=',')
+cdef np.ndarray[int, ndim=2] B
+cdef np.ndarray[int, ndim=2] C
 
-B = np.array([[1,2,3,4,5],[5,4,3,4,5],[1,2,2,3,2],[4,3,2,5,1]])
-C = np.array([[1,3,1,3,1],[1,3,2,4,2],[5,2,4,3,1]])
+B = np.ndarray([[1,2,3,4,5],[5,4,3,4,5],[1,2,2,3,2],[4,3,2,5,1]], dtype=np.int)
+C = np.array([[1,3,1,3,1],[1,3,2,4,2],[5,2,4,3,1]],dtype= np.int)
 
 
 
@@ -15,10 +20,14 @@ C = np.array([[1,3,1,3,1],[1,3,2,4,2],[5,2,4,3,1]])
 #data = np.asmatrix(data2)
 
 # FUNGSI PEMBUAT SINYAL REFERENCE
-def refSignal(t, fs, f): 
+def refSignal(int t,int  fs,float f): 
 # t  = panjang waktu sinyal reference (sekond)
 # fs = frekuensi sampling
 # f  = frekuensi stimulus / reference
+	cdef public int t,fs, p, j, TP 
+	cdef float f
+	cdef np.ndarray[int, ndim=2] Ref 
+
 	Ref = []
 	p = 1000;
 	TP = range(1,t*fs+1) # dimulai dari array 1 (bukan 0), berakhir di nilai sinecos= 0 atau 1.
@@ -38,6 +47,7 @@ def refSignal(t, fs, f):
 # jika channel lebih banyak, maka matrix harus di transpose
 # X = data, Y = reference, t1 = epoch awal data, t2 = epoch akhir data
 def cca(X,Y,t1,t2):
+	cdef public int t1, t2, lowcutoff, highcutoff
 
 	# cek channel < epoch, untuk data eeg, harus di transpose karena datanya terbalik dgn matlab 
 	[rowX,colX] = X.shape  
